@@ -22,13 +22,28 @@ Enemy.prototype.render = function() {
 };
 
 // Now write your own player class
+class Player {
+    constructor(xPos = 200, yPos = 200) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
+
+    update() {
+        console.log('player moves');
+    }
+    render() {
+        console.log('rendering');
+    }
+}
 // This class requires an update(), render() and
 // a handleInput() method.
 
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
+const allEnemies = [];
 // Place the player object in a variable called player
+const player = new Player;
 
 
 
