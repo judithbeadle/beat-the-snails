@@ -1,22 +1,23 @@
-// Enemies our player must avoid
-var Enemy = function() {
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.x = 0;
-    this.y = 83; // Mathrandom * row height
+// Enemy Class
+class Enemy {
+    constructor(x = 200, y = 200) {
+        this.x = 0; // initial x TODO: set at different distances from left edge (negative value)
+        this.y = 83; // initial y TODO: - Mathrandom * row height
+        this.sprite = 'images/enemy-bug.png'; // image
+        console.log('enemy is at '+ this.x + this.y);
+    }
+    // Update the enemy's position, required method for game
+    // Parameter: dt, a time delta between ticks
+    update(dt) {
+        this.x = (this.x + 1) * dt;
+    };
+    // Draw the enemy on the screen, required method for game
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    };
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    this.x = (this.x + 1) * dt;
-};
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
 
 // Player Class
 class Player {
