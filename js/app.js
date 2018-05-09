@@ -1,10 +1,10 @@
 // Enemy Class
 class Enemy {
-    constructor(x = 200, y = 200) {
-        this.x = 0; // initial x TODO: set at different distances from left edge (negative value)
-        this.y = 83; // initial y TODO: - Mathrandom * row height
+    constructor(x = 100, y = 200) {
+        this.x = x; // initial x TODO: set at different distances from left edge (negative value)
+        this.y = y; // initial y TODO: - Mathrandom * row height
         this.sprite = 'images/enemy-bug.png'; // image
-        console.log('enemy is at '+ this.x + this.y);
+        console.log(this.sprite + ' enemy is at '+ this.x + this.y);
     }
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
@@ -15,6 +15,9 @@ class Enemy {
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     };
+    handleInput(){
+        this.update();
+    }
 };
 
 
@@ -25,7 +28,7 @@ class Player {
         this.x = x;
         this.y = y;
         this.sprite = 'images/char-boy.png';
-        console.log('player is at '+ this.x + this.y);
+        console.log(this.sprite + ' player is at '+ this.x + this.y);
     }
 
     update() {
