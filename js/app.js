@@ -1,9 +1,11 @@
 /* Global values and functions
 ==================== */
 
-const canvasWidth = 505;
-const tileWidth = 101; // for offsetting enemies and moving player
-const tileHeight = 83; // for offsetting enemies and moving player
+const canvasWidth = 500;
+const tileWidth = 100; // for offsetting enemies and moving player
+const tileHeight = 80; // for offsetting enemies and moving player
+// offsets for pngs
+const entityOffesetY = tileHeight - 60, entityOffesetX = tileWidth/2;
 
 // Random number function for enemy start offsets and speed
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
@@ -16,9 +18,10 @@ function getRandomInt(max) {
 
 // Enemy Class
 class Enemy {
-    constructor(x, y, speed = 1) {
+    constructor(x, row, col, speed = 1) {
         this.x = x;
-        this.y = y;
+        this.row = row;
+        this.col = col;
         this.speed = speed;
         this.sprite = 'images/enemy-bug.png'; // image
     }
@@ -29,53 +32,68 @@ class Enemy {
         this.x = this.x + this.speed
         // reposition the enemy and assign new random speed once it's gone of the canvas
         if (this.x > canvasWidth){
-            this.x = (getRandomInt(400) * (-1)) - tileWidth;
-            this.speed = getRandomInt(2) + 1;
+            this.x = (getRandomInt(canvasWidth/2) * (-1)) - tileWidth;
+            this.speed = 0.5//getRandomInt(2) + 1;
+        }
+        if (this.x + tileWidth - 20 > 0 && this.x < canvasWidth - tileWidth){
+            this.col = Math.floor(((this.x - 20)/tileWidth) + 2);
+            console.log('col: ' + this.col + ' in row ' + this.row);
         }
     };
+    
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     };
+
+   
 };
 
 // Player Class
 class Player {
-    constructor(x = 200, y = 380) {
-        this.x = x; 
-        this.y = y;
+    constructor(col = 3, row = 4) {
+        this.col = col;
+        this.row = row;
+        this.x = (col * tileWidth) - tileWidth; 
+        this.y = (row * tileHeight) + tileHeight;
         this.sprite = 'images/char-boy.png'; // image
-        console.log(this.sprite + ' player is at '+ this.x + this.y);
+        console.log(this.sprite + ' player is at col '+ this.col + ' row ' + this.row);
     }
     // Draw the enemy on the screen, required method for game
     render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight);
     };
     // Move player when arrow keys are pressed
     handleInput(keyPressed){
         switch (keyPressed) {
         case 'left':
-            if (player.x >= 50) {
-                player.x -= 100;
+            if (player.col > 1) {
+                player.col -= 1;
+                // player.x -= tileWidth;
+                console.log('player is at col '+ player.col + ' row ' + player.row);
             }
             break;
         case 'right':
-            if (player.x <= 300) {
-                player.x += 100;
+            if (player.col < 5) {
+                player.col += 1;
+                console.log('player is at col '+ player.col + ' row ' + player.row);
             }
             break;
         case 'up':
-            if (player.y > 0) {
-                player.y -= 80;
+            if (player.row > 1) {
+                player.row -= 1;
+                console.log('player is at col '+ player.col + ' row ' + player.row);
             } else {
-                // player.score += 100;
-                player.y = 380;
-                player.x = 200;
+                // arrived at top, reset to bottom
+                player.col = 3
+                player.row = 4;
+                console.log('player is at col '+ player.col + ' row ' + player.row);
             }
             break;
         case 'down':
-            if (this.y <= 300) {
-                this.y += 80;
+            if (player.row < 5) {
+                player.row += 1;
+                console.log('player is at col '+ player.col + ' row ' + player.row);
             }
             break;
         }
@@ -92,18 +110,27 @@ let enemy = new Enemy;
 // Place all enemy objects in an array called allEnemies
 let allEnemies = [];
 // creating the enemies and putting them in the array
-for (var i = 0; i < 3; i++) {
+for (var i = 0; i < 1; i++) {
     enemy = new Enemy;
     //position enemy
-    enemy.x = getRandomInt(400) * (-1) - tileWidth;
-    enemy.y = (i + 1) * tileHeight  - 25;
-    enemy.speed = getRandomInt(2) + 1;
+    enemy.x = getRandomInt(canvasWidth/2) * (-1) - tileWidth;
+    enemy.y = (i + 1) * tileHeight - entityOffesetY;
+    enemy.speed = 0.5//getRandomInt(2) + 1;
     allEnemies.push(enemy);
+    enemy.row = i + 1;
     console.log('this enemy starts at ' + enemy.x + '/' + enemy.y);
 }
 
 // Player initiation
 const player = new Player;
+
+/* Collision detection 
+====================== */
+
+// if anything is on the same tile as anything else we have a collision
+// set this up broad, so we can also use it to detect collection of things later
+
+
 
 
 /* Input Handling
