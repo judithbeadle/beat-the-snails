@@ -1,14 +1,18 @@
-// some global values 
+/* Global values and functions
+==================== */
 
 const canvasWidth = 505;
-const tileWidth = 101; // for offsetting bugs and moving player
-const tileHeight = 83;
+const tileWidth = 101; // for offsetting enemies and moving player
+const tileHeight = 83; // for offsetting enemies and moving player
 
-// getting a random number function for canvas offsets and speed
+// Random number function for enemy start offsets and speed
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+
+/* Classes 
+===================== */
 
 // Enemy Class
 class Enemy {
@@ -21,7 +25,9 @@ class Enemy {
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
     update(dt) {
-        this.x = this.x + this.speed//= (this.x + 1) * dt;
+        // set random speed
+        this.x = this.x + this.speed
+        // reposition the enemy and assign new random speed once it's gone of the canvas
         if (this.x > canvasWidth){
             this.x = (getRandomInt(400) * (-1)) - tileWidth;
             this.speed = getRandomInt(2) + 1;
@@ -30,10 +36,8 @@ class Enemy {
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-        //console.log('enemy rendered' + this.y);
     };
 };
-
 
 // Player Class
 class Player {
@@ -47,6 +51,7 @@ class Player {
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     };
+    // Move player when arrow keys are pressed
     handleInput(keyPressed){
         switch (keyPressed) {
         case 'left':
@@ -63,32 +68,30 @@ class Player {
             if (player.y > 0) {
                 player.y -= 80;
             } else {
-                player.score += 100;
+                // player.score += 100;
                 player.y = 380;
                 player.x = 200;
             }
-
             break;
         case 'down':
             if (this.y <= 300) {
                 this.y += 80;
             }
-
             break;
-
         }
     }
+    // 
 };
 
 
+/* Initiations 
+====================== */
 
-
-
-// Now instantiate your objects.
+// Enemy initiation
 let enemy = new Enemy;
 // Place all enemy objects in an array called allEnemies
 let allEnemies = [];
-
+// creating the enemies and putting them in the array
 for (var i = 0; i < 3; i++) {
     enemy = new Enemy;
     //position enemy
@@ -99,12 +102,12 @@ for (var i = 0; i < 3; i++) {
     console.log('this enemy starts at ' + enemy.x + '/' + enemy.y);
 }
 
-
-
-
-// Place the player object in a variable called player
+// Player initiation
 const player = new Player;
 
+
+/* Input Handling
+====================== */
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
