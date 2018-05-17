@@ -18,13 +18,17 @@ var Engine = (function(global) {
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
-    var win = global.window,
+    var doc = global.document,
+        win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
 
     canvas.width = canvasWidth;
     canvas.height = 606;
+    scoreboard = document.createElement('div');
+    doc.body.appendChild(scoreboard);
+    scoreboard.setAttribute('class', 'scoreboard');
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -65,6 +69,7 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         main();
+        displayInfo();
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -78,7 +83,6 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the

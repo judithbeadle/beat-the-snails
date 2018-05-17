@@ -1,13 +1,13 @@
 /* Global values and functions
 ==================== */
 
-const doc = global.document;
-
 const canvasWidth = 500;
 const tileWidth = 100; // for offsetting enemies and moving player
 const tileHeight = 80; // for offsetting enemies and moving player
 // offsets for pngs
 const entityOffesetY = tileHeight - 50, entityOffesetX = tileWidth/2;
+// const scoreboardContainer = document.createElement('div');
+
 
 
 // Random number function for enemy start offsets and speed
@@ -124,10 +124,13 @@ let enemy = new Enemy;
 // Place all enemy objects in an array called allEnemies
 let allEnemies = [];
 
-const scoreboard = document.createElement('div');
-body.appendChild(scoreboard);
-scoreboard.setAttribute('class', 'scoreboard');
-scoreboard.innerHTML = '<h1>Test</h1>';
+let liveIcons = [ , , ];
+
+function displayInfo(){
+    // console.log('info')
+    // livesIcon = 
+    scoreboard.innerHTML = `Lives: ${player.lives} Level: ${gameLevel} Enemies: ${allEnemies.length}`;
+}
 
 // creating the enemies and putting them in the array
 function createEnemies(numEnemies = 3){
@@ -155,6 +158,7 @@ createEnemies();
 const player = new Player;
 
 function levelUp(){
+
     if (gameLevel === 3){
         console.log('Game Over');
         // remove keyevents
@@ -165,6 +169,7 @@ function levelUp(){
     } else {
         gameLevel ++;
         createEnemies(1);
+        displayInfo();
     }
     
 }
@@ -203,7 +208,7 @@ function checkCollision(){
             }
             player.lives -= 1;
             player.hit = true;
-            console.log(player.lives);
+            displayInfo();
             player.sprite = 'images/char-boy-hit.png';
             setTimeout(function() { 
                 player.col = 3;
