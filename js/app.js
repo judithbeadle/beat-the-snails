@@ -55,13 +55,14 @@ class Enemy {
 
 // Player Class
 class Player {
-    constructor(col = 3, row = 4, lives = 3) {
+    constructor(col = 3, row = 4, lives = 3, hit = false) {
         this.col = col;
         this.row = row;
         this.x = (col * tileWidth) - tileWidth; 
         this.y = (row * tileHeight) + tileHeight;
         this.sprite = 'images/char-boy.png'; // image
         this.lives = lives;
+        this.hit = hit;
     }
 
     // Draw the enemy on the screen, required method for game
@@ -140,7 +141,7 @@ function createEnemies(numEnemies = 3){
     }
 }
 
-// Enemy initiation
+// Enemies initiation
 createEnemies();
 
 // Player initiation
@@ -169,7 +170,7 @@ function levelUp(){
 
 function stopGame(){
     allEnemies = [];
-    player.handleInput();
+    //player.handleInput();
     //document.removeEventListener();
 }
 
@@ -182,23 +183,27 @@ function gameOver(){
 ====================== */
 
 function checkCollision(){
+    
     // getting a new array with enemies in same row and on canvas
     let enemiesInRow = allEnemies.filter(enemy => enemy.onCanvas === true && enemy.row === player.row);
     // checking if there are any on same col
     if (enemiesInRow.length > 0 && enemiesInRow.filter(enemy => enemy.col === player.col).length > 0) {
-        if(player.lives === 1){
-            player.lives -= 1;
+        if(player.lives === 0){
             gameOver();
         } else {
+            if (player.hit === true){
+                return;
+            }
+            player.lives -= 1;
+            player.hit = true;
+            console.log(player.lives);
             player.sprite = 'images/char-boy-hit.png';
             setTimeout(function() { 
-                player.lives -= 1;
                 player.col = 3;
                 player.row = 4;
                 player.sprite = 'images/char-boy.png';
+                player.hit = false;
             }, 500);
-
-            console.log(player.lives)
       }
     }
 }
