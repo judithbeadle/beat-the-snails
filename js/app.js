@@ -140,7 +140,11 @@ function createEnemies(numEnemies = 3){
     }
 }
 
+// Enemy initiation
 createEnemies();
+
+// Player initiation
+const player = new Player;
 
 function levelUp(){
     if (gameLevel === 3){
@@ -157,8 +161,7 @@ function levelUp(){
     
 }
 
-// Player initiation
-const player = new Player;
+
 
 
 /* Game Over
