@@ -1,6 +1,8 @@
 /* Global values and functions
 ==================== */
 
+const doc = global.document;
+
 const canvasWidth = 500;
 const tileWidth = 100; // for offsetting enemies and moving player
 const tileHeight = 80; // for offsetting enemies and moving player
@@ -121,6 +123,11 @@ let gameLevel = 1;
 let enemy = new Enemy;
 // Place all enemy objects in an array called allEnemies
 let allEnemies = [];
+
+const scoreboard = document.createElement('div');
+body.appendChild(scoreboard);
+scoreboard.setAttribute('class', 'scoreboard');
+scoreboard.innerHTML = '<h1>Test</h1>';
 
 // creating the enemies and putting them in the array
 function createEnemies(numEnemies = 3){

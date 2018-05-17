@@ -18,19 +18,14 @@ var Engine = (function(global) {
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
-    var doc = global.document,
-        win = global.window,
-        scoreboard = doc.createElement('div'),
+    var win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
 
     canvas.width = canvasWidth;
     canvas.height = 606;
-    doc.body.appendChild(scoreboard);
     doc.body.appendChild(canvas);
-    scoreboard.setAttribute('class', 'scoreboard');
-    scoreboard.innerHTML = '<h1>Test</h1>';
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
