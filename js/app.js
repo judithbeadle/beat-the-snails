@@ -5,7 +5,7 @@ const canvasWidth = 500;
 const tileWidth = 100; // for offsetting enemies and moving player
 const tileHeight = 80; // for offsetting enemies and moving player
 // offsets for pngs
-const entityOffesetY = tileHeight - 60, entityOffesetX = tileWidth/2;
+const entityOffesetY = tileHeight - 50, entityOffesetX = tileWidth/2;
 
 
 // Random number function for enemy start offsets and speed
@@ -66,7 +66,7 @@ class Player {
 
     // Draw the enemy on the screen, required method for game
     render() {
-        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY);
+        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY/2);
         checkCollision();
     };
     
@@ -187,9 +187,14 @@ function checkCollision(){
             player.lives -= 1;
             gameOver();
         } else {
-            player.lives -= 1;
-            player.col = 3;
-            player.row = 4;
+            player.sprite = 'images/char-boy-hit.png';
+            setTimeout(function() { 
+                player.lives -= 1;
+                player.col = 3;
+                player.row = 4;
+                player.sprite = 'images/char-boy.png';
+            }, 500);
+
             console.log(player.lives)
       }
     }
