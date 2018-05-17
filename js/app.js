@@ -8,6 +8,7 @@ const tileHeight = 80; // for offsetting enemies and moving player
 const entityOffesetY = tileHeight - 50, entityOffesetX = tileWidth/2;
 // const scoreboardContainer = document.createElement('div');
 
+let gameOver = false;
 
 
 // Random number function for enemy start offsets and speed
@@ -71,11 +72,12 @@ class Player {
     render() {
         ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY/2);
         checkCollision();
+        console.log('rendering player')
     };
     
     // Move player when arrow keys are pressed
     handleInput(keyPressed){
-        if (player.lives === 0){
+        if (gameOver === true){
             return;
         }
         switch (keyPressed) {
@@ -127,6 +129,7 @@ let allEnemies = [];
 let liveIcons = [ , , ];
 
 function displayInfo(){
+    let message;
     // console.log('info')
     // livesIcon = 
     scoreboard.innerHTML = `Lives: ${player.lives} Level: ${gameLevel} Enemies: ${allEnemies.length}`;
@@ -160,7 +163,7 @@ const player = new Player;
 function levelUp(){
 
     if (gameLevel === 3){
-        console.log('Game Over');
+        endGame('won');
         // remove keyevents
         // display points and Message
         // stuff collected 
@@ -180,15 +183,18 @@ function levelUp(){
 /* Game Over
 ====================== */
 
-function stopGame(){
+function endGame(result){
+    switch(result){
+        case 'won': 
+            console.log('you won');
+            break;
+        case 'lost':
+            console.log('you lost :(');
+            break;
+    }
+    
+    gameOver = true;
     allEnemies = [];
-    //player.handleInput();
-    //document.removeEventListener();
-}
-
-function gameOver(){
-    console.log('game over!');
-    stopGame();
 }
 
 /* Collision detection 
@@ -201,7 +207,7 @@ function checkCollision(){
     // checking if there are any on same col
     if (enemiesInRow.length > 0 && enemiesInRow.filter(enemy => enemy.col === player.col).length > 0) {
         if(player.lives === 0){
-            gameOver();
+            endGame('lost');
         } else {
             if (player.hit === true){
                 return;
