@@ -1,11 +1,11 @@
 /* Global values and functions
 ==================== */
 
-const canvasWidth = 500;
-const tileWidth = 100; // for offsetting enemies and moving player
-const tileHeight = 80; // for offsetting enemies and moving player
+const canvasWidth = 1000;
+const tileWidth = 200; // for offsetting enemies and moving player
+const tileHeight = 160; // for offsetting enemies and moving player
 // offsets for pngs
-const entityOffesetY = tileHeight - 50, entityOffesetX = tileWidth/2;
+const entityOffesetY = 60, entityOffesetX = tileWidth/2;
 // const scoreboardContainer = document.createElement('div');
 
 let gameOver = false;
@@ -63,14 +63,14 @@ class Player {
         this.row = row;
         this.x = (col * tileWidth) - tileWidth; 
         this.y = (row * tileHeight) + tileHeight;
-        this.sprite = 'images/char-boy.png'; // image
+        this.sprite = 'images/redhead.png'; // image
         this.lives = lives;
         this.hit = hit;
     }
 
     // Draw the enemy on the screen, required method for game
     render() {
-        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY/2);
+        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY);
         checkCollision();
         console.log('rendering player')
     };
@@ -215,11 +215,11 @@ function checkCollision(){
             player.lives -= 1;
             player.hit = true;
             displayInfo();
-            player.sprite = 'images/char-boy-hit.png';
+            player.sprite = 'images/redhead-hit.png';
             setTimeout(function() { 
                 player.col = 3;
                 player.row = 4;
-                player.sprite = 'images/char-boy.png';
+                player.sprite = 'images/redhead.png';
                 player.hit = false;
             }, 500);
       }

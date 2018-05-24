@@ -23,9 +23,10 @@ var Engine = (function(global) {
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         lastTime;
-
     canvas.width = canvasWidth;
-    canvas.height = 606;
+    canvas.height = 1212;
+
+    
     scoreboard = document.createElement('div');
     doc.body.appendChild(scoreboard);
     scoreboard.setAttribute('class', 'scoreboard');
@@ -176,8 +177,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png',
-        'images/char-boy-hit.png'
+        'images/redhead.png',
+        'images/redhead-hit.png'
     ]);
     Resources.onReady(init);
 
