@@ -157,6 +157,10 @@ var Engine = (function(global) {
 
         });
 
+        allFruit.forEach(function(fruit){
+            fruit.render();
+        })
+
         player.render();
     }
 
@@ -178,7 +182,9 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/redhead.png',
-        'images/redhead-hit.png'
+        'images/redhead-hit.png',
+        'images/strawberry.png',
+        'images/strawberry-eaten.png'
     ]);
     Resources.onReady(init);
 

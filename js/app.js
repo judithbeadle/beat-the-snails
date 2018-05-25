@@ -51,9 +51,8 @@ class Enemy {
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.row * tileHeight - entityOffesetY);
-    };
-
-   
+        checkEnemyEating();
+    }; 
 };
 
 // Player Class
@@ -65,14 +64,15 @@ class Player {
         this.y = (row * tileHeight) + tileHeight;
         this.sprite = 'images/redhead.png'; // image
         this.lives = lives;
+        // make this work with timeout function
         this.hit = hit;
     }
 
     // Draw the enemy on the screen, required method for game
     render() {
-        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY);
+        ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY+10);
         checkCollision();
-        console.log('rendering player')
+        checkForFruit()
     };
     
     // Move player when arrow keys are pressed
@@ -115,6 +115,28 @@ class Player {
     }
 };
 
+// Fruit Class
+class Fruit {
+    constructor(row, col, eaten = false) {
+        this.row = row;
+        this.col = col;
+        this.sprite = 'images/strawberry.png';
+        // you can only eat each fruit once - make this work with timeout function
+        this.eaten = eaten;
+    }
+    // Draw the strawberry on the screen
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), (this.col-1) * tileWidth, this.row * tileHeight - entityOffesetY);
+    }; 
+    eatThisFruit(){
+        this.eaten = true;
+        this.sprite = 'images/strawberry-eaten.png';
+        setTimeout(function() {
+            allFruit.pop(this);
+        }, 500);
+    }
+};
+
 
 
 /* Initiations 
@@ -125,6 +147,16 @@ let gameLevel = 1;
 let enemy = new Enemy;
 // Place all enemy objects in an array called allEnemies
 let allEnemies = [];
+// fruit initiation
+let fruit = new Fruit;
+// Place all fruit objects in an array called allFruit
+let allFruit = [];
+// array for picked fruit
+let pickedFruit = [];
+// array for fruit eaten by snails!
+let eatenFruit = [];
+// array for collected fruit
+let collectedFruit = [];
 
 let liveIcons = [ , , ];
 
@@ -132,7 +164,7 @@ function displayInfo(){
     let message;
     // console.log('info')
     // livesIcon = 
-    scoreboard.innerHTML = `Lives: ${player.lives} Level: ${gameLevel} Enemies: ${allEnemies.length}`;
+    scoreboard.innerHTML = `Lives: ${player.lives}, Level: ${gameLevel}, Number of Enemies: ${allEnemies.length} <br>Fruit in Basket: ${pickedFruit.length}<br><b>Snails: ${eatenFruit.length} You: ${collectedFruit.length}</b>`;
 }
 
 // creating the enemies and putting them in the array
@@ -150,17 +182,34 @@ function createEnemies(numEnemies = 3){
         enemy.y = (enemy.row + 1) * tileHeight - entityOffesetY;
         enemy.speed = 1 + (getRandomInt(5)/10) - (getRandomInt(5)/10) + gameLevel/10;
         allEnemies.push(enemy);
-        console.log(allEnemies.length);
     }
 }
 
-// Enemies initiation
+// creating the fruit and putting them in the array
+function createFruit(numFruit = 3){
+    for (var i = 0; i < numFruit; i++) {
+        fruit = new Fruit;
+        //position enemy
+        // avoid having fruit in first col
+        fruit.col = getRandomInt(4) + 2;
+        fruit.row = i + 1;
+        allFruit.push(fruit);
+        console.log('strawberrys: ' + allFruit.length);
+    }
+}
+
+// initiation
+createFruit();
 createEnemies();
 
 // Player initiation
 const player = new Player;
 
 function levelUp(){
+    collectedFruit = collectedFruit.concat(pickedFruit);
+    pickedFruit = [];
+    allFruit = [];
+    createFruit();
 
     if (gameLevel === 3){
         endGame('won');
@@ -169,6 +218,7 @@ function levelUp(){
         // stuff collected 
         // time bonus
         // total
+        displayInfo();
     } else {
         gameLevel ++;
         createEnemies(1);
@@ -214,6 +264,8 @@ function checkCollision(){
             }
             player.lives -= 1;
             player.hit = true;
+            pickedFruit = [];
+            allFruit =[];
             displayInfo();
             player.sprite = 'images/redhead-hit.png';
             setTimeout(function() { 
@@ -221,9 +273,35 @@ function checkCollision(){
                 player.row = 4;
                 player.sprite = 'images/redhead.png';
                 player.hit = false;
+                createFruit();
             }, 500);
       }
     }
+}
+
+function checkForFruit(){
+    // fruit on tile?
+    let fruitOnTile = allFruit.filter(fruit => fruit.row === player.row && fruit.col === player.col);
+    if (fruitOnTile.length > 0){
+        pickedFruit.push(fruit);
+        allFruit.pop('fruit');
+        displayInfo();
+    }
+}
+
+function checkEnemyEating(){
+    allFruit.forEach(function (fruit, index) {
+        let enemyOnTile = allEnemies.filter(enemy => enemy.row === fruit.row && enemy.col === fruit.col);
+        if (enemyOnTile.length > 0){
+            if (fruit.eaten === true){
+                return;
+            } else {
+                eatenFruit.push(fruit);
+                fruit.eatThisFruit();
+                displayInfo();
+            }
+        }
+    }); 
 }
 
 
