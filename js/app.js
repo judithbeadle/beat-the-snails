@@ -292,6 +292,10 @@ function checkForFruit(){
         allFruit.splice(fruitIndex, 1);
         displayInfo();
     }
+    // also get some new fruit to display if basket is empty and all fruit has been eaten up
+    if (pickedFruit.length === 0 && allFruit.length === 0 && player.hit === false){
+        createFruit();
+    }
 }
 
 function checkEnemyEating(){
