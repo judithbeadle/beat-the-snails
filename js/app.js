@@ -131,9 +131,13 @@ class Fruit {
     eatThisFruit(){
         this.eaten = true;
         this.sprite = 'images/strawberry-eaten.png';
-        setTimeout(function() {
-            allFruit.pop(this);
-        }, 500);
+        let fruitIndex = allFruit.indexOf(this);
+        if (fruitIndex > -1) {
+            setTimeout(function() {
+                allFruit.splice(fruitIndex, 1);
+            }, 500);
+            console.log(allFruit);
+        }
     }
 };
 
@@ -284,7 +288,8 @@ function checkForFruit(){
     let fruitOnTile = allFruit.filter(fruit => fruit.row === player.row && fruit.col === player.col);
     if (fruitOnTile.length > 0){
         pickedFruit.push(fruit);
-        allFruit.pop('fruit');
+        let fruitIndex = allFruit.indexOf('fruit');
+        allFruit.splice(fruitIndex, 1);
         displayInfo();
     }
 }
