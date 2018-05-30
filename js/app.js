@@ -233,7 +233,7 @@ function levelUp(){
     pickedFruit = [];
     allFruit = [];
     player.runs -= 1;
-    if (player.runs === 0){
+    if (player.runs < 1){
             endGame();
     } else {
         createFruit();
@@ -244,11 +244,7 @@ function levelUp(){
             createEnemies(1);
             displayInfo();
         }
-
     }
-
-    
-    
 }
 
 
@@ -272,7 +268,7 @@ function checkCollision(){
     let enemiesInRow = allEnemies.filter(enemy => enemy.onCanvas === true && enemy.row === player.row);
     // checking if there are any on same col
     if (enemiesInRow.length > 0 && enemiesInRow.filter(enemy => enemy.col === player.col).length > 0) {
-         if (player.hit === true || player.runs === 0){
+         if (player.hit === true || player.runs < 1){
             return;
         } else {
             player.runs -= 1;
@@ -287,7 +283,7 @@ function checkCollision(){
                 player.row = 4;
                 player.sprite = 'images/redhead.png';
                 player.hit = false;
-                if(player.runs === 0){
+                if(player.runs < 1){
                     endGame();
                 } else {
                      createFruit();
@@ -298,6 +294,9 @@ function checkCollision(){
 }
 
 function checkFruitTaken(){
+    if (allFruit.length === 0 && pickedFruit.length === 0) {
+        createFruit();
+    }
     allFruit.forEach(function (fruit, index) {
         let enemyOnTile = allEnemies.filter(enemy => enemy.row === fruit.row && enemy.col === fruit.col);
         //let playerOnTile = false;
