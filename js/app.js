@@ -57,13 +57,13 @@ class Enemy {
 
 // Player Class
 class Player {
-    constructor(col = 3, row = 4, lives = 3, hit = false) {
+    constructor(col = 3, row = 4, runs = 6, hit = false) {
         this.col = col;
         this.row = row;
         this.x = (col * tileWidth) - tileWidth; 
         this.y = (row * tileHeight) + tileHeight;
         this.sprite = 'images/redhead.png'; // image
-        this.lives = lives;
+        this.runs = runs;
         // make this work with timeout function
         this.hit = hit;
     }
@@ -183,7 +183,7 @@ function displayInfo(){
     pickedFruitDisplay.setAttribute('class', 'pickedFruit');
     eatenFruitDisplay.setAttribute('class', 'eatenFruit');
     updateInfo();
-    //scoreboard.innerHTML = `Lives: ${player.lives}, Level: ${gameLevel}, Number of Enemies: ${allEnemies.length} <br>Fruit in Basket: ${pickedFruit.length}<br><b>Snails: ${eatenFruit.length} You: ${collectedFruit.length}</b>`;
+    //scoreboard.innerHTML = `runs: ${player.runs}, Level: ${gameLevel}, Number of Enemies: ${allEnemies.length} <br>Fruit in Basket: ${pickedFruit.length}<br><b>Snails: ${eatenFruit.length} You: ${collectedFruit.length}</b>`;
 }
 
 
@@ -230,20 +230,23 @@ function levelUp(){
     pickedFruit = [];
     allFruit = [];
     createFruit();
-
-    if (gameLevel === 3){
-        endGame('won');
-        // remove keyevents
-        // display points and Message
-        // stuff collected 
-        // time bonus
-        // total
-        displayInfo();
+    if (player.runs === 0){
+            endGame();
     } else {
-        gameLevel ++;
-        createEnemies(1);
+        if (gameLevel === 3){
         displayInfo();
+        player.runs -= 1;
+
+        } else {
+            gameLevel ++;
+            createEnemies(1);
+            displayInfo();
+            player.runs -= 1;
+        }
+        
     }
+
+    
     
 }
 
@@ -265,6 +268,7 @@ function endGame(result){
     
     gameOver = true;
     allEnemies = [];
+    allFruit = [];
 }
 
 /* Collision detection 
@@ -276,14 +280,15 @@ function checkCollision(){
     let enemiesInRow = allEnemies.filter(enemy => enemy.onCanvas === true && enemy.row === player.row);
     // checking if there are any on same col
     if (enemiesInRow.length > 0 && enemiesInRow.filter(enemy => enemy.col === player.col).length > 0) {
-        if(player.lives === 0){
+        if(player.runs === 0){
             endGame('lost');
         } else {
             if (player.hit === true){
                 return;
             }
-            player.lives -= 1;
+            player.runs -= 1;
             player.hit = true;
+            eatenFruit = eatenFruit.concat(pickedFruit);
             pickedFruit = [];
             allFruit =[];
             displayInfo();
@@ -317,7 +322,6 @@ function checkFruitTaken(){
             if (fruit.eaten === true){
                 return;
             } else {
-                
                 fruit.getsEeaten();
                 eatenFruit.push(fruit);
                 displayInfo();
