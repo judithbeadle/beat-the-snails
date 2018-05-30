@@ -5,7 +5,7 @@ const canvasWidth = 1000;
 const tileWidth = 200; // for offsetting enemies and moving player
 const tileHeight = 160; // for offsetting enemies and moving player
 // offsets for pngs
-const entityOffesetY = 60, entityOffesetX = tileWidth/2;
+const entityOffesetY = tileHeight, entityOffesetX = tileWidth/2;
 // const scoreboardContainer = document.createElement('div');
 
 let gameOver = false;
@@ -169,17 +169,20 @@ const eatenFruitDisplay = document.createElement('ul');
 // array for collected fruit
 let collectedFruit = [];
 
-let liveIcons = [ , , ];
+const runsDisplay = document.createElement('p');
+let runsMessage = 'Runs left: ';
 
 
 function updateInfo(){
     pickedFruitDisplay.innerHTML = basketFruit.repeat(pickedFruit.length) + oneFruit.repeat(collectedFruit.length);
     eatenFruitDisplay.innerHTML = oneFruit.repeat(eatenFruit.length);
+    runsDisplay.innerHTML = runsMessage + player.runs;
 }
 
 function displayInfo(){
     scoreboard.appendChild(pickedFruitDisplay);
     scoreboard.appendChild(eatenFruitDisplay);
+    scoreboard.appendChild(runsDisplay);
     pickedFruitDisplay.setAttribute('class', 'pickedFruit');
     eatenFruitDisplay.setAttribute('class', 'eatenFruit');
     updateInfo();
@@ -229,21 +232,19 @@ function levelUp(){
     collectedFruit = collectedFruit.concat(pickedFruit);
     pickedFruit = [];
     allFruit = [];
-    createFruit();
+    player.runs -= 1;
     if (player.runs === 0){
             endGame();
     } else {
+        createFruit();
         if (gameLevel === 3){
-        displayInfo();
-        player.runs -= 1;
-
+            displayInfo();
         } else {
             gameLevel ++;
             createEnemies(1);
             displayInfo();
-            player.runs -= 1;
         }
-        
+
     }
 
     
@@ -256,36 +257,24 @@ function levelUp(){
 /* Game Over
 ====================== */
 
-function endGame(result){
-    switch(result){
-        case 'won': 
-            console.log('you won');
-            break;
-        case 'lost':
-            console.log('you lost :(');
-            break;
-    }
-    
+function endGame(){
     gameOver = true;
     allEnemies = [];
     allFruit = [];
+    displayInfo();
 }
 
 /* Collision detection 
 ====================== */
 
 function checkCollision(){
-    
     // getting a new array with enemies in same row and on canvas
     let enemiesInRow = allEnemies.filter(enemy => enemy.onCanvas === true && enemy.row === player.row);
     // checking if there are any on same col
     if (enemiesInRow.length > 0 && enemiesInRow.filter(enemy => enemy.col === player.col).length > 0) {
-        if(player.runs === 0){
-            endGame('lost');
+         if (player.hit === true || player.runs === 0){
+            return;
         } else {
-            if (player.hit === true){
-                return;
-            }
             player.runs -= 1;
             player.hit = true;
             eatenFruit = eatenFruit.concat(pickedFruit);
@@ -298,9 +287,13 @@ function checkCollision(){
                 player.row = 4;
                 player.sprite = 'images/redhead.png';
                 player.hit = false;
-                createFruit();
+                if(player.runs === 0){
+                    endGame();
+                } else {
+                     createFruit();
+                }
             }, 500);
-      }
+        }
     }
 }
 

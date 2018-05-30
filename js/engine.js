@@ -24,7 +24,7 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
     canvas.width = canvasWidth;
-    canvas.height = 1212;
+    canvas.height = tileHeight * 6.5;
 
     
     scoreboard = document.createElement('div');
@@ -137,7 +137,7 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                ctx.drawImage(Resources.get(rowImages[row]), col * tileWidth, row * tileHeight);
+                ctx.drawImage(Resources.get(rowImages[row]), col * tileWidth, row * tileHeight - 100);
             }
         }
 
