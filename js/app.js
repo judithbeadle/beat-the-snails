@@ -176,7 +176,7 @@ let runsMessage = 'Runs left: ';
 function updateInfo(){
     pickedFruitDisplay.innerHTML = basketFruit.repeat(pickedFruit.length) + oneFruit.repeat(collectedFruit.length);
     eatenFruitDisplay.innerHTML = oneFruit.repeat(eatenFruit.length);
-    runsDisplay.innerHTML = runsMessage + player.runs;
+    runsDisplay.innerHTML = runsMessage + ' <span>' + player.runs + '</span>';
 }
 
 function displayInfo(){
