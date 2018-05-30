@@ -4,3 +4,46 @@ body {
 canvas {
 	width: 500px;
 }
+
+.scoreboard {
+	height: 5em;
+	width: 500px;
+	margin: 0 auto;
+}
+
+.scoreboard ul {
+	margin: 0;
+	margin-bottom: 0.5em;
+	padding: 0.5em 0 0.5em 3em;
+}
+
+.pickedFruit, .eatenFruit{
+	height: 2em;
+	display: block;
+	background-repeat: no-repeat;
+	background-size: contain;
+	position: relative;
+	text-align: left;
+}
+
+.pickedFruit {
+	background-image: url(../images/profile-girl.png);
+}
+
+.eatenFruit {
+	background-image: url(../images/profile-snail.png);
+}
+
+.strawberry {
+	display: inline-block;
+	width: 2em;
+	height: 4em;
+	background-image: url(../images/single-strawberry.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.pickedFruit .strawberry.temp {
+	background-image: url(../images/single-strawberry-50.png);
+	float: right;
+}

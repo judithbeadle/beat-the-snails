@@ -160,19 +160,32 @@ let fruit = new Fruit;
 let allFruit = [];
 // array for picked fruit
 let pickedFruit = [];
+const pickedFruitDisplay = document.createElement('ul');
+const oneFruit = "<li class = 'strawberry'></li>";
+const basketFruit = "<li class = 'strawberry temp'></li>";
 // array for fruit eaten by snails!
 let eatenFruit = [];
+const eatenFruitDisplay = document.createElement('ul');
 // array for collected fruit
 let collectedFruit = [];
 
 let liveIcons = [ , , ];
 
-function displayInfo(){
-    let message;
-    // console.log('info')
-    // livesIcon = 
-    scoreboard.innerHTML = `Lives: ${player.lives}, Level: ${gameLevel}, Number of Enemies: ${allEnemies.length} <br>Fruit in Basket: ${pickedFruit.length}<br><b>Snails: ${eatenFruit.length} You: ${collectedFruit.length}</b>`;
+
+function updateInfo(){
+    pickedFruitDisplay.innerHTML = basketFruit.repeat(pickedFruit.length) + oneFruit.repeat(collectedFruit.length);
+    eatenFruitDisplay.innerHTML = oneFruit.repeat(eatenFruit.length);
 }
+
+function displayInfo(){
+    scoreboard.appendChild(pickedFruitDisplay);
+    scoreboard.appendChild(eatenFruitDisplay);
+    pickedFruitDisplay.setAttribute('class', 'pickedFruit');
+    eatenFruitDisplay.setAttribute('class', 'eatenFruit');
+    updateInfo();
+    //scoreboard.innerHTML = `Lives: ${player.lives}, Level: ${gameLevel}, Number of Enemies: ${allEnemies.length} <br>Fruit in Basket: ${pickedFruit.length}<br><b>Snails: ${eatenFruit.length} You: ${collectedFruit.length}</b>`;
+}
+
 
 // creating the enemies and putting them in the array
 function createEnemies(numEnemies = 3){
@@ -297,7 +310,7 @@ function checkFruitTaken(){
                 console.log('player is picking fruit');
                 fruit.getsPicked();
                 pickedFruit.push(fruit);
-                displayInfo();
+                updateInfo();
             }
         };
         if (enemyOnTile.length > 0){
