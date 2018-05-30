@@ -51,7 +51,7 @@ class Enemy {
     // Draw the enemy on the screen, required method for game
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.row * tileHeight - entityOffesetY);
-        checkEnemyEating();
+        checkFruitTaken();
     }; 
 };
 
@@ -72,7 +72,7 @@ class Player {
     render() {
         ctx.drawImage(Resources.get(this.sprite), (this.col * tileWidth) - tileWidth, this.row * tileHeight - entityOffesetY+10);
         checkCollision();
-        checkForFruit()
+        checkFruitTaken();
     };
     
     // Move player when arrow keys are pressed
@@ -82,33 +82,27 @@ class Player {
         }
         switch (keyPressed) {
         case 'left':
-            if (player.col > 1) {
-                player.col -= 1;
-                // player.x -= tileWidth;
-                console.log('player is at col '+ player.col + ' row ' + player.row);
+            if (this.col > 1) {
+                this.col -= 1;
             }
             break;
         case 'right':
-            if (player.col < 5) {
-                player.col += 1;
-                console.log('player is at col '+ player.col + ' row ' + player.row);
+            if (this.col < 5) {
+                this.col += 1;
             }
             break;
         case 'up':
-            if (player.row > 1) {
-                player.row -= 1;
-                console.log('player is at col '+ player.col + ' row ' + player.row);
+            if (this.row > 1) {
+                this.row -= 1;
             } else {
                 levelUp();
-                player.col = 3;
-                player.row = 4;
-                console.log('Gamelevel: ' + gameLevel );
+                this.col = 3;
+                this.row = 4;
             }
             break;
         case 'down':
-            if (player.row < 5) {
-                player.row += 1;
-                console.log('player is at col '+ player.col + ' row ' + player.row);
+            if (this.row < 5) {
+                this.row += 1;
             }
             break;
         }
@@ -117,18 +111,19 @@ class Player {
 
 // Fruit Class
 class Fruit {
-    constructor(row, col, eaten = false) {
+    constructor(row, col, eaten = false, picked = false) {
         this.row = row;
         this.col = col;
         this.sprite = 'images/strawberry.png';
-        // you can only eat each fruit once - make this work with timeout function
+        // you can only eat or pick each fruit once - make this work with timeout function
         this.eaten = eaten;
+        this.picked = picked;
     }
     // Draw the strawberry on the screen
     render() {
         ctx.drawImage(Resources.get(this.sprite), (this.col-1) * tileWidth, this.row * tileHeight - entityOffesetY);
     }; 
-    eatThisFruit(){
+    getsEeaten(){
         this.eaten = true;
         this.sprite = 'images/strawberry-eaten.png';
         let fruitIndex = allFruit.indexOf(this);
@@ -136,6 +131,14 @@ class Fruit {
             setTimeout(function() {
                 allFruit.splice(fruitIndex, 1);
             }, 500);
+            console.log(allFruit);
+        }
+    }
+    getsPicked(){
+        this.picked = true;
+        let fruitIndex = allFruit.indexOf(this);
+        if (fruitIndex > -1) {
+            allFruit.splice(fruitIndex, 1);
             console.log(allFruit);
         }
     }
@@ -283,30 +286,27 @@ function checkCollision(){
     }
 }
 
-function checkForFruit(){
-    // fruit on tile?
-    let fruitOnTile = allFruit.filter(fruit => fruit.row === player.row && fruit.col === player.col);
-    if (fruitOnTile.length > 0){
-        pickedFruit.push(fruit);
-        let fruitIndex = allFruit.indexOf('fruit');
-        allFruit.splice(fruitIndex, 1);
-        displayInfo();
-    }
-    // also get some new fruit to display if basket is empty and all fruit has been eaten up
-    if (pickedFruit.length === 0 && allFruit.length === 0 && player.hit === false){
-        createFruit();
-    }
-}
-
-function checkEnemyEating(){
+function checkFruitTaken(){
     allFruit.forEach(function (fruit, index) {
         let enemyOnTile = allEnemies.filter(enemy => enemy.row === fruit.row && enemy.col === fruit.col);
+        //let playerOnTile = false;
+        if (player.row === fruit.row && player.col === fruit.col){
+            if (fruit.picked === true){
+                return;
+            } else {
+                console.log('player is picking fruit');
+                fruit.getsPicked();
+                pickedFruit.push(fruit);
+                displayInfo();
+            }
+        };
         if (enemyOnTile.length > 0){
             if (fruit.eaten === true){
                 return;
             } else {
+                
+                fruit.getsEeaten();
                 eatenFruit.push(fruit);
-                fruit.eatThisFruit();
                 displayInfo();
             }
         }
