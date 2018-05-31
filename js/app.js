@@ -127,12 +127,9 @@ class Fruit {
         this.eaten = true;
         this.sprite = 'images/strawberry-eaten.png';
         let fruitIndex = allFruit.indexOf(this);
-        if (fruitIndex > -1) {
-            setTimeout(function() {
-                allFruit.splice(fruitIndex, 1);
-            }, 500);
-            console.log(allFruit);
-        }
+        setTimeout(function() {
+            allFruit.splice(fruitIndex, 1);
+        }, 500);
     }
     getsPicked(){
         this.picked = true;
@@ -195,7 +192,7 @@ function createEnemies(numEnemies = 3){
         for (var i = 0; i < numEnemies; i++) {
         enemy = new Enemy;
         //position enemy
-        enemy.x = getRandomInt(canvasWidth/2) * (-1) - tileWidth;
+        enemy.x = getRandomInt(canvasWidth/4) * (-1) - tileWidth;
         if (i > 2) {
             enemy.row = getRandomInt(3) + 1;
         }
@@ -203,7 +200,7 @@ function createEnemies(numEnemies = 3){
             enemy.row = i + 1;
         }
         enemy.y = (enemy.row + 1) * tileHeight - entityOffesetY;
-        enemy.speed = 1 + (getRandomInt(5)/10) - (getRandomInt(5)/10) + gameLevel/10;
+        enemy.speed = 1 + (getRandomInt(5)/15) - (getRandomInt(5)/10) + gameLevel/10;
         allEnemies.push(enemy);
     }
 }
