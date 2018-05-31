@@ -17,7 +17,7 @@ canvas {
 	font-family: 'Open Sans', sans-serif;
 }
 
-.scoreboard p {
+.scoreboard > p {
 	position: relative;
 	display: inline-block;
 	width: auto;
@@ -31,12 +31,24 @@ canvas {
 	border-radius: 10px;
 	text-transform: uppercase;
 }
-.scoreboard p span {
+.scoreboard > p span {
 	font-weight: bold;
 	background-color: #fff;
 	display: inline-block;
 	width: 1.5em;
 	border-radius: 1em;
+}
+
+.scoreboard .resultPanel{
+	position: relative;
+	width: 20em;
+	margin: 2em auto;
+	z-index: 1000;
+	color: #424848;
+	padding: 1em 1.5em;
+	background-color: rgba(255, 255, 255, 0.85);
+	border-radius: 1em;
+
 }
 
 .scoreboard ul {
@@ -74,4 +86,22 @@ canvas {
 .pickedFruit .strawberry.temp {
 	background-image: url(../images/single-strawberry-50.png);
 	float: right;
+}
+
+p.info-text {
+	font-size: 0.875em;
+}
+
+button {
+	padding: 0.5em 1em;
+	border-radius: 10px;
+	border: none;
+	color: white;
+	font-size: 1rem;
+	text-transform: uppercase;
+	background: #8fc800; /* Old browsers */
+	background: -moz-linear-gradient(top, #8fc800 0%, #479e00 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #8fc800 0%,#479e00 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #8fc800 0%,#479e00 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8fc800', endColorstr='#479e00',GradientType=0 ); /* IE6-9 */
 }

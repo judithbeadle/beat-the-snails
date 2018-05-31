@@ -4,12 +4,17 @@
 const canvasWidth = 1000;
 const tileWidth = 200; // for offsetting enemies and moving player
 const tileHeight = 160; // for offsetting enemies and moving player
-const startButton = document.querySelector('.start'); //start button
+
 // offsets for pngs
 const entityOffesetY = tileHeight, entityOffesetX = tileWidth/2;
 
 let gameOver = false;
 let gameStarted = false;
+
+let resultHeadline = " ";
+let resultText = "";
+
+
 
 
 // Random number function for enemy start offsets and speed
@@ -147,6 +152,7 @@ class Fruit {
 /* Initiations 
 ====================== */
 
+
 let gameLevel = 1;
 // Enemy initiation
 let enemy = new Enemy;
@@ -170,21 +176,45 @@ let collectedFruit = [];
 const runsDisplay = document.createElement('p');
 let runsMessage = 'Runs left: ';
 
+const infoPanel = document.createElement('div');
+infoPanel.setAttribute('class', 'resultPanel');
+
+
+
+const startButton = document.createElement('button');
+startButton.setAttribute('class', 'start-button');
+startButton.innerHTML = "Start the game";
+
+const startText = "<h2>Beat the Snails</h2><p>Don’t you just love strawberries?! <br>Well, so do the snails... </p><p class='info-text'>Collect as many strawberries as possible with each run across the garden. But watch out! If one of those greedy snails gets to you, before you reach the other side, you’ll lose the strawberries from the current run. And beware, those snails can get quite fast... </p><p>So, who’s going to have that strawberry feast?</p>";
+
+
 
 function updateInfo(){
     pickedFruitDisplay.innerHTML = basketFruit.repeat(pickedFruit.length) + oneFruit.repeat(collectedFruit.length);
     eatenFruitDisplay.innerHTML = oneFruit.repeat(eatenFruit.length);
     runsDisplay.innerHTML = runsMessage + ' <span>' + player.runs + '</span>';
+
+    if (gameOver === true){
+        scoreboard.appendChild(infoPanel);
+        infoPanel.innerHTML = `<h2>${resultHeadline}</h2><p>${resultText}</p>`;
+        infoPanel.appendChild(startButton);
+        startButton.innerHTML = "play again";
+    }
 }
 
 function displayInfo(){
+    runsDisplay.innerHTML = runsMessage + ' <span>' + player.runs + '</span>';
     scoreboard.appendChild(pickedFruitDisplay);
     scoreboard.appendChild(eatenFruitDisplay);
     scoreboard.appendChild(runsDisplay);
+    
     pickedFruitDisplay.setAttribute('class', 'pickedFruit');
     eatenFruitDisplay.setAttribute('class', 'eatenFruit');
-    updateInfo();
-    //scoreboard.innerHTML = `runs: ${player.runs}, Level: ${gameLevel}, Number of Enemies: ${allEnemies.length} <br>Fruit in Basket: ${pickedFruit.length}<br><b>Snails: ${eatenFruit.length} You: ${collectedFruit.length}</b>`;
+    if (gameStarted === false && gameOver === false){
+        scoreboard.appendChild(infoPanel);
+        infoPanel.innerHTML = startText;
+        infoPanel.appendChild(startButton);
+    }
 }
 
 
@@ -260,6 +290,7 @@ function startGame(){
     player.runs = 6;
     console.log(player.runs);
     updateInfo();
+    infoPanel.remove();
 }
 
 /* Game Over
@@ -271,7 +302,46 @@ function endGame(){
     allEnemies = [];
     allFruit = [];
     pickedFruit = [];
-    displayInfo();
+    //displayResult();
+    resultMessage();
+    updateInfo();
+}
+
+function checkResult(){
+    if(collectedFruit.length < eatenFruit.length){
+        return 'lost';
+    } else if(collectedFruit.length === eatenFruit.length)  {
+        return 'even';
+    } else {
+        if(collectedFruit.length >= 8){
+            return 'won';
+        } else {
+            return 'ok';
+        }
+    }
+}
+
+function resultMessage(result){
+    result = checkResult();
+    switch (result) {
+    case 'won':
+        resultHeadline = "You won!"
+        resultText = "Wow, well done. Those snails never stood a chance!";
+        break;
+    case 'ok':
+        resultHeadline = "Faster than the snails..."
+        resultText = "... but with all that running around, did you forget to pick the strawberries?";
+        break;
+    case 'lost':
+        resultHeadline = "Oh dear."
+        resultText = "The snails really took to your garden. Not much left for you.";
+        break;
+    case 'even':
+        resultHeadline = "Fair Share!"
+        resultText = "Well, there is enough for everyone, really.";
+        break;
+    }
+
 }
 
 /* Collision detection 
