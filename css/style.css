@@ -65,7 +65,7 @@ canvas {
 .strawberry {
 	display: inline-block;
 	width: 2em;
-	height: 4em;
+	height: 2em;
 	background-image: url(../images/single-strawberry.png);
 	background-repeat: no-repeat;
 	background-size: contain;
