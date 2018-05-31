@@ -254,6 +254,7 @@ function createFruit(){
 function levelUp(){
     collectedFruit = collectedFruit.concat(pickedFruit);
     pickedFruit = [];
+    console.log(collectedFruit.length + ', in Basket: ' + pickedFruit.length);
     allFruit = [];
     player.runs -= 1;
     if (player.runs < 1){
@@ -261,11 +262,11 @@ function levelUp(){
     } else {
         createFruit();
         if (gameLevel === 3){
-            displayInfo();
+            updateInfo();
         } else {
             gameLevel ++;
             createEnemies(1);
-            displayInfo();
+            updateInfo();
         }
     }
 }
@@ -401,7 +402,7 @@ function checkFruitTaken(){
             } else {
                 fruit.getsEeaten();
                 eatenFruit.push(fruit);
-                displayInfo();
+                updateInfo();
             }
         }
     }); 
