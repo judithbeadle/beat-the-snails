@@ -207,14 +207,16 @@ function createEnemies(numEnemies = 3){
 
 // creating the fruit and putting them in the array
 function createFruit(numFruit = 3){
+    if(gameOver === true){
+        return;
+    }
+    numFruit = 3 - allFruit.length;
     for (var i = 0; i < numFruit; i++) {
         fruit = new Fruit;
-        //position enemy
         // avoid having fruit in first col
         fruit.col = getRandomInt(4) + 2;
         fruit.row = i + 1;
         allFruit.push(fruit);
-        console.log('strawberrys: ' + allFruit.length);
     }
 }
 
@@ -254,6 +256,7 @@ function endGame(){
     gameOver = true;
     allEnemies = [];
     allFruit = [];
+    pickedFruit = [];
     displayInfo();
 }
 
@@ -269,6 +272,9 @@ function checkCollision(){
             return;
         } else {
             player.runs -= 1;
+            if(player.runs < 1){
+                endGame();
+            }
             player.hit = true;
             eatenFruit = eatenFruit.concat(pickedFruit);
             pickedFruit = [];
@@ -280,11 +286,6 @@ function checkCollision(){
                 player.row = 4;
                 player.sprite = 'images/redhead.png';
                 player.hit = false;
-                if(player.runs < 1){
-                    endGame();
-                } else {
-                     createFruit();
-                }
             }, 500);
         }
     }
