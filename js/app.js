@@ -83,7 +83,7 @@ class Player {
     
     // Move player when arrow keys are pressed
     handleInput(keyPressed){
-        if (gameStarted === false){
+        if (gameStarted === false || player.hit === true){
             return;
         }
         switch (keyPressed) {
