@@ -4,11 +4,12 @@
 const canvasWidth = 1000;
 const tileWidth = 200; // for offsetting enemies and moving player
 const tileHeight = 160; // for offsetting enemies and moving player
+const startButton = document.querySelector('.start'); //start button
 // offsets for pngs
 const entityOffesetY = tileHeight, entityOffesetX = tileWidth/2;
-// const scoreboardContainer = document.createElement('div');
 
 let gameOver = false;
+let gameStarted = false;
 
 
 // Random number function for enemy start offsets and speed
@@ -77,7 +78,7 @@ class Player {
     
     // Move player when arrow keys are pressed
     handleInput(keyPressed){
-        if (gameOver === true){
+        if (gameStarted === false){
             return;
         }
         switch (keyPressed) {
@@ -129,7 +130,7 @@ class Fruit {
         let fruitIndex = allFruit.indexOf(this);
         setTimeout(function() {
             allFruit.splice(fruitIndex, 1);
-        }, 500);
+        }, 300);
     }
     getsPicked(){
         this.picked = true;
@@ -200,13 +201,13 @@ function createEnemies(numEnemies = 3){
             enemy.row = i + 1;
         }
         enemy.y = (enemy.row + 1) * tileHeight - entityOffesetY;
-        enemy.speed = 1 + (getRandomInt(5)/15) - (getRandomInt(5)/10) + gameLevel/10;
+        enemy.speed = 1 + (getRandomInt(5)/15) - (getRandomInt(5)/5) + gameLevel/4;
         allEnemies.push(enemy);
     }
 }
 
 // creating the fruit and putting them in the array
-function createFruit(numFruit = 3){
+function createFruit(){
     if(gameOver === true){
         return;
     }
@@ -219,13 +220,6 @@ function createFruit(numFruit = 3){
         allFruit.push(fruit);
     }
 }
-
-// initiation
-createFruit();
-createEnemies();
-
-// Player initiation
-const player = new Player;
 
 function levelUp(){
     collectedFruit = collectedFruit.concat(pickedFruit);
@@ -246,14 +240,34 @@ function levelUp(){
     }
 }
 
+/* Start Game
+====================== */
 
+// create player
+const player = new Player;
 
+// start up Game 
+function startGame(){
+    gameStarted = true;
+    // initiation
+    createFruit();
+    createEnemies(); 
+    // (re)setting
+    gameOver = false;
+    gameLevel = 1;
+    eatenFruit = [];
+    collectedFruit = [];
+    player.runs = 6;
+    console.log(player.runs);
+    updateInfo();
+}
 
 /* Game Over
 ====================== */
 
 function endGame(){
     gameOver = true;
+    gameStarted = false;
     allEnemies = [];
     allFruit = [];
     pickedFruit = [];
@@ -271,16 +285,15 @@ function checkCollision(){
          if (player.hit === true || player.runs < 1){
             return;
         } else {
-            player.runs -= 1;
+            player.runs -= 1; // player loses a 'live'
+            eatenFruit = eatenFruit.concat(pickedFruit); // fruits in basket go to the enemy
+            pickedFruit = []; // basket is empty again
             if(player.runs < 1){
                 endGame();
             }
-            player.hit = true;
-            eatenFruit = eatenFruit.concat(pickedFruit);
-            pickedFruit = [];
-            allFruit =[];
-            displayInfo();
-            player.sprite = 'images/redhead-hit.png';
+            player.hit = true; // set player hit status to avoid continues collision during timeout
+            updateInfo();
+            player.sprite = 'images/redhead-hit.png'; // swap images for 'animation' of character
             setTimeout(function() { 
                 player.col = 3;
                 player.row = 4;
@@ -291,8 +304,12 @@ function checkCollision(){
     }
 }
 
+/* Fruit eaten / picked ?
+========================= */
+
 function checkFruitTaken(){
-    if (allFruit.length === 0 && pickedFruit.length === 0) {
+    // if player's basket is empty and all fruit are gone from field, create some new ones
+    if (allFruit.length === 0 && pickedFruit.length === 0 && gameStarted === true) {
         createFruit();
     }
     allFruit.forEach(function (fruit, index) {
@@ -326,6 +343,7 @@ function checkFruitTaken(){
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
+
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -335,3 +353,7 @@ document.addEventListener('keyup', function(e) {
     };
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
+
+startButton.addEventListener('click', startGame);
