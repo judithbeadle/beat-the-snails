@@ -17,6 +17,10 @@ canvas {
 	font-family: 'Open Sans', sans-serif;
 }
 
+.scoreboard h2 {
+	margin-top: 0;
+}
+
 .scoreboard > p {
 	position: relative;
 	display: inline-block;
@@ -99,6 +103,8 @@ button {
 	color: white;
 	font-size: 1rem;
 	text-transform: uppercase;
+	cursor: pointer;
+	margin-top: 1.5em;
 	background: #8fc800; /* Old browsers */
 	background: -moz-linear-gradient(top, #8fc800 0%, #479e00 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(top, #8fc800 0%,#479e00 100%); /* Chrome10-25,Safari5.1-6 */
