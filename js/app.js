@@ -12,7 +12,6 @@ const entityOffesetY = tileHeight, entityOffesetX = tileWidth/2;
 let gameOver = false;
 let gameStarted = false;
 
-
 // arrays and variables for score and level handling
 
 let gameLevel = 1;
@@ -51,7 +50,7 @@ startButton.setAttribute('class', 'start-button');
 startButton.innerHTML = "Start the game";
 
 // introduction to the game
-const startText = "<h2>Beat the Snails</h2><p>Don’t you just love strawberries?! <br>Well, so do the snails... </p><p class='info-text'>Use the arrow keys on your keyboard to move the player and collect as many strawberries as possible with each run across the garden. But watch out! If one of those greedy snails gets to you, before you reach the other side, you’ll lose the strawberries from the current run. And beware, those snails can get quite fast... </p><p>So, who’s going to have that strawberry feast?</p>";
+const startText = "<h2>Beat the snails</h2><p>Don’t you just love strawberries?! <br>Well, so do the snails... </p><p class='info-text'>Use the arrow keys on your keyboard to move the player and collect as many strawberries as possible with each run across the garden. But watch out! If one of those greedy snails gets to you, before you reach the other side, you’ll lose the strawberries from the current run. And beware, those snails can get quite fast... </p>";
 
 // resetting html based on updated values
 function updateInfo(){
