@@ -222,11 +222,9 @@ class Fruit {
         let fruitIndex = allFruit.indexOf(this);
         if (fruitIndex > -1) {
             allFruit.splice(fruitIndex, 1);
-            console.log(allFruit);
         }
     }
 };
-
 
 
 /* Initiations 
