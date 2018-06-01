@@ -25,7 +25,7 @@ There are two more results possible in addition to winning or losing, for added 
 
 The characters and backgrounds have been created by me with watercolor to showcase some illustration skills in addition to coding skills.
 
-[Play the game](https://judithbeadle.github.io/frontend-nanodegree-arcade-game/)
+[Play the game](https://judithbeadle.github.io/beat-the-snails/)
 
 ## Acknowledgements and Sources
 
