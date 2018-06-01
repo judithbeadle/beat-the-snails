@@ -1,6 +1,3 @@
-frontend-nanodegree-arcade-game
-===============================
-
 # Beat the snails
 
 A simple arcade style game with a garden theme
