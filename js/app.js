@@ -13,7 +13,7 @@ let gameOver = false;
 let gameStarted = false;
 
 
-
+// arrays and variables for score and level handling
 
 let gameLevel = 1;
 // Place all enemy objects in an array called allEnemies
@@ -27,39 +27,37 @@ let eatenFruit = [];
 // array for collected fruit
 let collectedFruit = [];
 
+
 /* variables and nodes for dsiplaying game scores etc
 ================== */
 
-
-// string variables for the Text to display at end of game, depending on result
+// string variables for score panel text
 let resultHeadline = "";
 let resultText = "";
+let runsMessage = 'Runs left: ';
 
+// nodes for html display of score
 const pickedFruitDisplay = document.createElement('ul');
 const oneFruit = "<li class = 'strawberry'></li>";
 const basketFruit = "<li class = 'strawberry temp'></li>";
 const eatenFruitDisplay = document.createElement('ul');
-
-
 const runsDisplay = document.createElement('p');
-let runsMessage = 'Runs left: ';
-
 const infoPanel = document.createElement('div');
 infoPanel.setAttribute('class', 'resultPanel');
 
-
-
+// button for (re)starting game
 const startButton = document.createElement('button');
 startButton.setAttribute('class', 'start-button');
 startButton.innerHTML = "Start the game";
 
+// introduction to the game
 const startText = "<h2>Beat the Snails</h2><p>Don’t you just love strawberries?! <br>Well, so do the snails... </p><p class='info-text'>Use the arrow keys on your keyboard to move the player and collect as many strawberries as possible with each run across the garden. But watch out! If one of those greedy snails gets to you, before you reach the other side, you’ll lose the strawberries from the current run. And beware, those snails can get quite fast... </p><p>So, who’s going to have that strawberry feast?</p>";
 
+// resetting html based on updated values
 function updateInfo(){
     pickedFruitDisplay.innerHTML = basketFruit.repeat(pickedFruit.length) + oneFruit.repeat(collectedFruit.length);
     eatenFruitDisplay.innerHTML = oneFruit.repeat(eatenFruit.length);
     runsDisplay.innerHTML = runsMessage + ' <span>' + player.runs + '</span>';
-
     if (gameOver === true){
         scoreboard.appendChild(infoPanel);
         infoPanel.innerHTML = `<h2>${resultHeadline}</h2><p>${resultText}</p>`;
@@ -68,14 +66,18 @@ function updateInfo(){
     }
 }
 
+// adding created / updated nodes to the DOM
 function displayInfo(){
     runsDisplay.innerHTML = runsMessage + ' <span>' + player.runs + '</span>';
     scoreboard.appendChild(pickedFruitDisplay);
     scoreboard.appendChild(eatenFruitDisplay);
     scoreboard.appendChild(runsDisplay);
     
+    // adding classes for fruit in basket and fruit added to player score for different styling
     pickedFruitDisplay.setAttribute('class', 'pickedFruit');
     eatenFruitDisplay.setAttribute('class', 'eatenFruit');
+
+    // only display intro panel text first time around
     if (gameStarted === false && gameOver === false){
         scoreboard.appendChild(infoPanel);
         infoPanel.innerHTML = startText;
@@ -83,9 +85,9 @@ function displayInfo(){
     }
 }
 
-
 // Random number function for enemy start offsets and speed
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -107,15 +109,19 @@ class Enemy {
 
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
+
     update(dt) {
+
         // update position based on speed
         this.x = this.x + this.speed;
+
         // while the enemy is on canvas, define the column it's on and check for collision and fruit
         if (this.x + tileWidth - 20 > 0 && this.x < canvasWidth - tileWidth){
             this.col = Math.floor(((this.x - 20)/tileWidth) + 2);
             checkFruitTaken();
             checkCollision();
         }
+
         // reposition the enemy and assign new random speed once it's gone off the canvas
         if (this.x > canvasWidth){
             this.x = (getRandomInt(100) * (-1)) - tileWidth;
@@ -190,9 +196,9 @@ class Fruit {
         this.row = row;
         this.col = col;
         this.sprite = 'images/strawberry.png';
-        // you can only eat each fruit once - helper boolean for time-out function
-        this.eaten = eaten;
+        this.eaten = eaten; // you can only eat each fruit once - helper boolean for time-out function
     }
+
     // Draw the strawberry on the screen
     render() {
         ctx.drawImage(Resources.get(this.sprite), (this.col-1) * tileWidth, this.row * tileHeight - entityOffesetY);
@@ -228,12 +234,15 @@ class Fruit {
 
 // Enemy initiation
 let enemy = new Enemy;
+
 // fruit initiation
 let fruit = new Fruit;
+
 // creating the enemies and putting them in the array
 function createEnemies(numEnemies = 3){
         for (var i = 0; i < numEnemies; i++) {
         enemy = new Enemy;
+
         //position enemy
         enemy.x = getRandomInt(canvasWidth/4) * (-1) - tileWidth;
         if (i > 2) {
@@ -249,15 +258,20 @@ function createEnemies(numEnemies = 3){
 }
 
 // creating the fruit and putting them in the array
+
 function createFruit(){
     if(gameOver === true){
         return;
     }
-    numFruit = 3 - allFruit.length; // only replace taken fruit
+    // replace fruit taken to make total number 3 again
+    numFruit = 3 - allFruit.length;
     for (var i = 0; i < numFruit; i++) {
         fruit = new Fruit;
-        // avoid having fruit in first col
+
+        // place fruit in random column, avoid having fruit in first col
         fruit.col = getRandomInt(4) + 2;
+
+        // one fruit per row
         fruit.row = i + 1;
         allFruit.push(fruit);
     }
@@ -270,6 +284,7 @@ function createFruit(){
 // collsion detection between player and enemies
 
 function checkCollision(){
+
     // filtering enemies that are in same row and col as player
     let enemiesOnTile = allEnemies.filter(enemy => enemy.row === player.row && enemy.col === player.col);
     if (enemiesOnTile.length > 0) {
@@ -286,6 +301,7 @@ function checkCollision(){
             updateInfo(); // update info on scores
             player.sprite = 'images/redhead-hit.png'; // swap images for 'animation' of character
             setTimeout(function() { 
+
                 // reset player position and image after a short 'animated' pause
                 player.col = 3; 
                 player.row = 4;
@@ -300,6 +316,7 @@ function checkCollision(){
 
 function checkFruitTaken(){
     allFruit.forEach(function (fruit, index) {
+
         // check if player is on fruit tile
         if (player.row === fruit.row && player.col === fruit.col){
             // fruit gets picked
@@ -307,6 +324,7 @@ function checkFruitTaken(){
             pickedFruit.push(fruit);
             updateInfo();  
         };
+
         // check if enemy is on fruit tile
         let enemyOnTile = allEnemies.filter(enemy => enemy.row === fruit.row && enemy.col === fruit.col);
         if (enemyOnTile.length > 0){
@@ -319,6 +337,7 @@ function checkFruitTaken(){
             }
         }
     });
+
     // if player's basket is empty and all fruit are gone from field, create some new ones
     if (allFruit.length === 0 && pickedFruit.length === 0 && gameStarted === true) {
         createFruit();
@@ -326,6 +345,7 @@ function checkFruitTaken(){
 }
 
 // player reaches the other end of garden 
+
 function levelUp(){
     collectedFruit = collectedFruit.concat(pickedFruit); // fruit is secured to player score
     pickedFruit = [];
@@ -335,6 +355,7 @@ function levelUp(){
         endGame(); // end of game reached?
     } else {
         createFruit(); // new fruit
+
         // update game Level for more & faster snails, 3 is max
         if (gameLevel === 3){
             updateInfo();
@@ -350,9 +371,11 @@ function levelUp(){
 ====================== */
 
 // create player
+
 const player = new Player;
 
 // start up Game or restart game
+
 function startGame(){
     gameStarted = true;
     // initiation
@@ -371,6 +394,8 @@ function startGame(){
 /* Game Over
 ====================== */
 
+// this handles the end of a game
+
 function endGame(){
     gameOver = true;
     gameStarted = false;
@@ -384,6 +409,7 @@ function endGame(){
 
 // display different messages for the different results based on: 
 // won against snails? and fruit collected
+
 function checkResult(){
     if(collectedFruit.length < eatenFruit.length){
         return 'lost';
@@ -436,7 +462,5 @@ document.addEventListener('keyup', function(e) {
     };
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-
 
 startButton.addEventListener('click', startGame);
