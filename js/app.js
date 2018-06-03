@@ -109,6 +109,33 @@ class Enemy {
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
 
+    checkCollision(){
+        if( this.row === player.row && (this.x > ((player.col - 1.8) * tileWidth) && this.x < (player.col - 0.2) * tileWidth) ){
+            if (player.hit === true || player.runs < 1){
+                return;
+            } else {
+                player.runs -= 1; // player loses one go/live
+                eatenFruit = eatenFruit.concat(pickedFruit); // fruits in basket get added to the enemy score
+                pickedFruit = []; // basket is empty again
+                if(player.runs < 1){
+                    endGame();
+                }
+                player.hit = true; // set player hit status to avoid continued collision during timeout
+                updateInfo(); // update info on scores
+                player.sprite = 'images/redhead-hit.png'; // swap images for 'animation' of character
+                setTimeout(function() { 
+
+                    // reset player position and image after a short 'animated' pause
+                    player.col = 3; 
+                    player.row = 4;
+                    player.sprite = 'images/redhead.png'; 
+                    player.hit = false;
+                }, 500);
+            }
+        }
+    }
+
+
     update(dt) {
 
         // update position based on speed
@@ -118,7 +145,7 @@ class Enemy {
         if (this.x + tileWidth - 20 > 0 && this.x < canvasWidth - tileWidth){
             this.col = Math.floor(((this.x - 20)/tileWidth) + 2);
             checkFruitTaken();
-            checkCollision();
+            this.checkCollision();
         }
 
         // reposition the enemy and assign new random speed once it's gone off the canvas
@@ -277,37 +304,6 @@ function createFruit(){
 
 /* Game Logic 
 ====================== */
-
-// collsion detection between player and enemies
-
-function checkCollision(){
-
-    // filtering enemies that are in same row and col as player
-    let enemiesOnTile = allEnemies.filter(enemy => enemy.row === player.row && enemy.col === player.col);
-    if (enemiesOnTile.length > 0) {
-         if (player.hit === true || player.runs < 1){
-            return;
-        } else {
-            player.runs -= 1; // player loses one go/live
-            eatenFruit = eatenFruit.concat(pickedFruit); // fruits in basket get added to the enemy score
-            pickedFruit = []; // basket is empty again
-            if(player.runs < 1){
-                endGame();
-            }
-            player.hit = true; // set player hit status to avoid continued collision during timeout
-            updateInfo(); // update info on scores
-            player.sprite = 'images/redhead-hit.png'; // swap images for 'animation' of character
-            setTimeout(function() { 
-
-                // reset player position and image after a short 'animated' pause
-                player.col = 3; 
-                player.row = 4;
-                player.sprite = 'images/redhead.png'; 
-                player.hit = false;
-            }, 500);
-        }
-    }
-}
 
 // fruit on same tile as enemy or player? it's eaten / picked
 
