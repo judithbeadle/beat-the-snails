@@ -14,7 +14,9 @@ A simple arcade style game with a garden theme
 
 Playing against snails in a garden setting, the aim of the game is to collect as many strawberries as possible in a limited number of runs through the garden. 
 
-### How to play
+### Play the game
+
+Clone this repository or download all files and open index.html in your preferred browser or you can play the game here: [Play the game](https://judithbeadle.github.io/beat-the-snails/)
 
 Using the arrow keys on your keyboard you can move the player to collect strawberries. Each strawberry picked will need to be taken across the garden, where they will be added to the player's score. Snails can equally collect strawberries, which are added to their score and will also take over any strawberries the player has collected on a particular run if collision occurs. 
 If the player has more strawberries than the snails, she wins. 
@@ -24,8 +26,6 @@ If the player has more strawberries than the snails, she wins.
 There are two more results possible in addition to winning or losing, for added interest.
 
 The characters and backgrounds have been created by me with watercolor to showcase some illustration skills in addition to coding skills.
-
-[Play the game](https://judithbeadle.github.io/beat-the-snails/)
 
 ## Acknowledgements and Sources
 
