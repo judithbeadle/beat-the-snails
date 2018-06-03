@@ -1,3 +1,5 @@
+'use strict';
+
 /* Global values and functions
 ==================== */
 
@@ -185,17 +187,17 @@ class Player {
             return;
         }
         switch (keyPressed) {
-        case 'left':
+            case 'left':
             if (this.col > 1) {
                 this.col -= 1;
             }
             break;
-        case 'right':
+            case 'right':
             if (this.col < 5) {
                 this.col += 1;
             }
             break;
-        case 'up':
+            case 'up':
             if (this.row > 1) {
                 this.row -= 1;
             } else {
@@ -204,7 +206,7 @@ class Player {
                 this.row = 4;
             }
             break;
-        case 'down':
+            case 'down':
             if (this.row < 5) {
                 this.row += 1;
             }
@@ -288,7 +290,7 @@ function createFruit(){
         return;
     }
     // replace fruit taken to make total number 3 again
-    numFruit = 3 - allFruit.length;
+    let numFruit = 3 - allFruit.length;
     for (var i = 0; i < numFruit; i++) {
         fruit = new Fruit;
 
