@@ -242,17 +242,18 @@ class Fruit {
     getsEeaten(){
         this.sprite = 'images/strawberry-eaten.png';
         this.eaten = true;
-        let fruitIndex = allFruit.indexOf(this);
+    
         setTimeout(function() {
             // remove fruit with slight delay for 'animation'
-            allFruit.splice(fruitIndex, 1);
-        }, 300);
+            allFruit = allFruit.filter(fruit => fruit.eaten === false);
+        }, 800);
     }
 
     // fruit gets picked, ie. moved to a different array
     getsPicked(){
         this.picked = true;
         let fruitIndex = allFruit.indexOf(this);
+        console.log('picked ' + fruitIndex);
         if (fruitIndex > -1) {
             allFruit.splice(fruitIndex, 1);
         }
