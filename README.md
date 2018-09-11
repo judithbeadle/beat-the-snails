@@ -2,7 +2,7 @@
 
 A simple arcade style game with a garden theme
 
-![Game stills](https://github.com/judithbeadle/beat-the-snails/master/bts-summary.png)
+![Game stills](https://github.com/judithbeadle/beat-the-snails/blob/master/bts-summary.png)
 
 ## Table of Contents
 
