@@ -88,6 +88,7 @@ function displayInfo(){
         infoPanel.innerHTML = startText;
         infoPanel.appendChild(form);
         form.appendChild(startButton);
+        startButton.focus();
     }
 }
 
