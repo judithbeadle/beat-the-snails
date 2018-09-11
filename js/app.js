@@ -240,7 +240,6 @@ class Fruit {
         setTimeout(function() {
             // remove fruit with slight delay for 'animation'
             allFruit.splice(fruitIndex, 1);
-            this.eaten = false;
         }, 300);
     }
 
