@@ -47,8 +47,10 @@ const infoPanel = document.createElement('div');
 infoPanel.setAttribute('class', 'resultPanel');
 
 // button for (re)starting game
+const form = document.createElement('form');
 const startButton = document.createElement('button');
 startButton.setAttribute('class', 'start-button');
+startButton.setAttribute('type', 'submit');
 startButton.innerHTML = "Start the game";
 
 // introduction to the game
@@ -62,8 +64,10 @@ function updateInfo(){
     if (gameOver === true){
         scoreboard.appendChild(infoPanel);
         infoPanel.innerHTML = `<h2>${resultHeadline}</h2><p>${resultText}</p>`;
-        infoPanel.appendChild(startButton);
+        infoPanel.appendChild(form);
+        form.appendChild(startButton);
         startButton.innerHTML = "play again";
+        startButton.focus();
     }
 }
 
@@ -82,7 +86,8 @@ function displayInfo(){
     if (gameStarted === false && gameOver === false){
         scoreboard.appendChild(infoPanel);
         infoPanel.innerHTML = startText;
-        infoPanel.appendChild(startButton);
+        infoPanel.appendChild(form);
+        form.appendChild(startButton);
     }
 }
 
@@ -457,4 +462,4 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-startButton.addEventListener('click', startGame);
+form.addEventListener('submit', startGame);
